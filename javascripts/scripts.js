@@ -1,6 +1,7 @@
 var canvas = document.getElementById('canvas');
 var change_color = document.getElementById('change_color');
 var erase = document.getElementById('erase');
+var random = document.getElementById('random');
 var ctx = canvas.getContext('2d');
 var shapesArray = [];
 
@@ -32,10 +33,6 @@ Shape.prototype.reColor = function(){
   }
 };
 
-Shape.prototype.erase = function(){
-  ctx.clearRect(0, 0, canvas.width, canvas.height)
-};
-
 function Square(x, y, width, color){
   Shape.call(this, x, y, width, color, 'Square');
 };
@@ -43,7 +40,7 @@ function Square(x, y, width, color){
 Square.prototype = new Shape();
 Square.prototype.constructor = Square;
 
-Square.prototype.drawSquare = function(x, y, width, width, color){
+Square.prototype.draw = function(x, y, width, width, color){
   ctx.fillStyle = color;
   ctx.fillRect (x, y, width, width);
 };
@@ -55,7 +52,7 @@ function Circle(x, y, width, color){
 Circle.prototype = new Shape();
 Circle.prototype.constructor = Circle;
 
-Circle.prototype.drawCircle = function(x, y, width, color){
+Circle.prototype.draw = function(x, y, width, color){
   ctx.beginPath();
   ctx.arc(x,y,width/2,0,2*Math.PI);
   ctx.fillStyle = color;
@@ -70,11 +67,11 @@ var position = function(width, color, shape){
   if(shape === 'Square'){
     var square = new Square(x, y, width, color);
     shapesArray.push(square);
-    square.drawSquare(x, y, width, width, color);
+    square.draw(x, y, width, width, color);
   } else if(shape === 'Circle'){
     var circle = new Circle(x, y, width, color);
     shapesArray.push(circle);
-    circle.drawCircle(x, y, width, color);
+    circle.draw(x, y, width, color);
   }
 };
 
@@ -86,8 +83,26 @@ change_color.addEventListener('click', function(){
 });
 
 erase.addEventListener('click', function(){
-  for (var i = 0; i < shapesArray.length; i++) {
-    var shapes = shapesArray[i];
-    shapes.erase.call(shapesArray[i]);
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+  shapesArray = [];
+});
+
+var randomColor = function(){
+  return "#"+((1<<24)*Math.random()|0).toString(16)
+};
+
+random.addEventListener('click', function(){
+  for (var i = 0; i < 100; i++) {
+    var type = Math.floor(Math.random() * 2);
+    var x = Math.floor(Math.random() * canvas.width);
+    var y = Math.floor(Math.random() * canvas.height);
+    var width = Math.floor(Math.random() * 300);
+    var color = randomColor();
+    if (type === 0) {
+      var shape = new Square(x, y, width, color);
+    } else if (type === 1) {
+      var shape = new Circle(x, y, width, color);
+    }
+    shape.draw(x, y, width, width, color);
   }
 })
