@@ -33,12 +33,8 @@ Shape.prototype.reColor = function(){
 };
 
 Shape.prototype.erase = function(){
-  if(this.shape === 'Square'){
-    ctx.clearRect(this.x, this.y, this.width, this.width);
-  } else if (this.shape === 'Circle'){
-    ctx.clearRect
-  }
-}
+  ctx.clearRect(0, 0, canvas.width, canvas.height)
+};
 
 function Square(x, y, width, color){
   Shape.call(this, x, y, width, color, 'Square');
