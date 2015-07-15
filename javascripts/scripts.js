@@ -1,5 +1,6 @@
 var canvas = document.getElementById('canvas');
-var change_color = document.getElementById('change_color')
+var change_color = document.getElementById('change_color');
+var erase = document.getElementById('erase');
 var ctx = canvas.getContext('2d');
 var shapesArray = [];
 
@@ -19,17 +20,25 @@ function Shape(x, y, width, color, shape){
 };
 
 Shape.prototype.reColor = function(){
-    this.color = document.getElementById('color').value;
-    if(this.shape === 'Square'){
-      ctx.fillStyle = this.color;
-      ctx.fillRect (this.x, this.y, this.width, this.width);
-    } else if(this.shape === 'Circle'){
-      ctx.beginPath();
-      ctx.arc(this.x, this.y, this.width/2,0,2*Math.PI);
-      ctx.fillStyle = this.color;
-      ctx.fill();
-    }
+  this.color = document.getElementById('color').value;
+  if(this.shape === 'Square'){
+    ctx.fillStyle = this.color;
+    ctx.fillRect (this.x, this.y, this.width, this.width);
+  } else if(this.shape === 'Circle'){
+    ctx.beginPath();
+    ctx.arc(this.x, this.y, this.width/2,0,2*Math.PI);
+    ctx.fillStyle = this.color;
+    ctx.fill();
+  }
 };
+
+Shape.prototype.erase = function(){
+  if(this.shape === 'Square'){
+    ctx.clearRect(this.x, this.y, this.width, this.width);
+  } else if (this.shape === 'Circle'){
+    ctx.clearRect
+  }
+}
 
 function Square(x, y, width, color){
   Shape.call(this, x, y, width, color, 'Square');
@@ -75,7 +84,14 @@ var position = function(width, color, shape){
 
 change_color.addEventListener('click', function(){
   for (var i = 0; i < shapesArray.length; i++) {
-    var shapes = shapesArray[i]
-    shapes.reColor.call(shapesArray[i])
+    var shapes = shapesArray[i];
+    shapes.reColor.call(shapesArray[i]);
   }
 });
+
+erase.addEventListener('click', function(){
+  for (var i = 0; i < shapesArray.length; i++) {
+    var shapes = shapesArray[i];
+    shapes.erase.call(shapesArray[i]);
+  }
+})
