@@ -2,6 +2,7 @@ var canvas = document.getElementById('canvas');
 var change_color = document.getElementById('change_color');
 var erase = document.getElementById('erase');
 var random = document.getElementById('random');
+var randomChange = document.getElementById('random_change');
 var ctx = canvas.getContext('2d');
 var shapesArray = [];
 
@@ -20,8 +21,8 @@ function Shape(x, y, width, color, shape){
   this.y = y
 };
 
-Shape.prototype.reColor = function(){
-  this.color = document.getElementById('color').value;
+Shape.prototype.reColor = function(color){
+  this.color = color;
   if(this.shape === 'Square'){
     ctx.fillStyle = this.color;
     ctx.fillRect (this.x, this.y, this.width, this.width);
@@ -78,7 +79,7 @@ var position = function(width, color, shape){
 change_color.addEventListener('click', function(){
   for (var i = 0; i < shapesArray.length; i++) {
     var shapes = shapesArray[i];
-    shapes.reColor.call(shapesArray[i]);
+    shapes.reColor.call(shapesArray[i], document.getElementById('color').value);
   }
 });
 
@@ -90,6 +91,13 @@ erase.addEventListener('click', function(){
 var randomColor = function(){
   return "#"+((1<<24)*Math.random()|0).toString(16)
 };
+
+randomChange.addEventListener('click', function(){
+  for (var i = 0; i < shapesArray.length; i++) {
+    var shapes = shapesArray[i];
+    shapes.reColor.call(shapesArray[i], randomColor());
+  }
+})
 
 random.addEventListener('click', function(){
   for (var i = 0; i < 100; i++) {
@@ -105,4 +113,4 @@ random.addEventListener('click', function(){
     }
     shape.draw(x, y, width, width, color);
   }
-})
+});
