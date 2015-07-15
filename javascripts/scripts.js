@@ -1,4 +1,5 @@
 var canvas = document.getElementById('canvas');
+var change_color = document.getElementById('change_color')
 var ctx = canvas.getContext('2d');
 var shapesArray = [];
 
@@ -9,10 +10,18 @@ canvas.addEventListener('click', function(){
   position(width, color, shape);
 });
 
+change_color.addEventListener('click', function(){
+  shapesArray.reColor
+});
+
 function Shape(width, color, shape){
   this.width = width,
   this.color = color,
   this.shape = shape
+};
+
+Shape.prototype.reColor = function(){
+  this.color = document.getElementById('color');
 };
 
 function Square(width, color){
@@ -44,6 +53,8 @@ Circle.prototype.drawCircle = function(x, y, width, color){
 var position = function(width, color, shape){
   var x = event.x;
   var y = event.y;
+  x -= canvas.offsetLeft;
+  y -= canvas.offsetTop;
   if(shape === 'Square'){
     var square = new Square(width, color);
     shapesArray.push(square);
