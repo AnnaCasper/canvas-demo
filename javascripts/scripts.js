@@ -10,22 +10,29 @@ canvas.addEventListener('click', function(){
   position(width, color, shape);
 });
 
-change_color.addEventListener('click', function(){
-  shapesArray.reColor
-});
-
-function Shape(width, color, shape){
+function Shape(x, y, width, color, shape){
   this.width = width,
   this.color = color,
-  this.shape = shape
+  this.shape = shape,
+  this.x = x,
+  this.y = y
 };
 
 Shape.prototype.reColor = function(){
-  this.color = document.getElementById('color');
+    this.color = document.getElementById('color').value;
+    if(this.shape === 'Square'){
+      ctx.fillStyle = this.color;
+      ctx.fillRect (this.x, this.y, this.width, this.width);
+    } else if(this.shape === 'Circle'){
+      ctx.beginPath();
+      ctx.arc(this.x, this.y, this.width/2,0,2*Math.PI);
+      ctx.fillStyle = this.color;
+      ctx.fill();
+    }
 };
 
-function Square(width, color){
-  Shape.call(this, width, color, 'Square');
+function Square(x, y, width, color){
+  Shape.call(this, x, y, width, color, 'Square');
 };
 
 Square.prototype = new Shape();
@@ -36,8 +43,8 @@ Square.prototype.drawSquare = function(x, y, width, width, color){
   ctx.fillRect (x, y, width, width);
 };
 
-function Circle(width, color){
-  Shape.call(this, width, color, 'Circle');
+function Circle(x, y, width, color){
+  Shape.call(this, x, y, width, color, 'Circle');
 };
 
 Circle.prototype = new Shape();
@@ -56,13 +63,19 @@ var position = function(width, color, shape){
   x -= canvas.offsetLeft;
   y -= canvas.offsetTop;
   if(shape === 'Square'){
-    var square = new Square(width, color);
+    var square = new Square(x, y, width, color);
     shapesArray.push(square);
     square.drawSquare(x, y, width, width, color);
   } else if(shape === 'Circle'){
-    var circle = new Circle(width, color);
+    var circle = new Circle(x, y, width, color);
     shapesArray.push(circle);
-    console.log(shapesArray);
     circle.drawCircle(x, y, width, color);
   }
 };
+
+change_color.addEventListener('click', function(){
+  for (var i = 0; i < shapesArray.length; i++) {
+    var shapes = shapesArray[i]
+    shapes.reColor.call(shapesArray[i])
+  }
+});
